@@ -1,0 +1,71 @@
+---
+title: "Selección del mejor software estadístico para proyectos académicos"
+author: "Cristina Romero Ríos"
+lang: es
+toc: true
+number-sections: false
+format:
+  html:
+    df-print: paged
+    code-tools: true
+  pdf: 
+    df-print: kable
+    keep-tex: true
+    papersize: a4
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{table}{H}
+      - \floatplacement{figure}{H}
+    geometry:
+      - margin=2.5cm
+    hyperrefoptions:
+      - backref=page
+    citeproc: false
+    include-in-header: 
+       text: |
+         \usepackage{fvextra}
+         \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}     
+    include-before-body:
+      text: |
+        \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
+          showspaces = false,
+          showtabs = false,
+          breaksymbolleft={},
+          breaklines
+          % Note: setting commandchars=\\\{\} here will cause an error 
+        }
+execute: 
+  echo: true
+  warnings: false
+tbl-cap-location: top
+---
+
+## Motivación
+
+En el ámbito académico y de investigación, es habitual utilizar software estadístico para el análisis de datos, la modelización y la visualización de resultados. Sin embargo, existen múltiples opciones con distintas características, licencias y niveles de complejidad.
+El objetivo de este trabajo es seleccionar el software estadístico más adecuado para proyectos académicos, aplicando técnicas de decisión multicriterio que permitan fundamentar la elección en criterios objetivos y ponderados.
+
+## Alternativas y Criterios
+
+1. SPSS
+
+2. RStudio
+
+3. Python
+
+4. Stata
+
+Criterios
+
+Coste y licencia (C1):Evalúa el gasto y accesibilidad del software.
+Facilidad de uso (C2): Mide la usabilidad para estudiantes o docentes.
+Capacidad técnica (C3):Evalúa la potencia y variedad de análisis estadísticos.
+  -C3.1 Variedad de análisis disponibles
+  -C3.2 Automatización o uso de scripts
+Compatibilidad (C4): Considera la capacidad de trabajar con distintos formatos y sistemas.
+  -C4.1 Formatos compatibles
+  -C4.2 Integración con otros lenguajes
+Comunidad y soporte (C5):Disponibilidad de soporte técnico, foros, tutoriales en línea y la fuerza de la comunidad de usuarios.
+Visualización y resultados (C6): Evalúa la calidad de los gráficos, reportes y exportación de resultados.
+
+
