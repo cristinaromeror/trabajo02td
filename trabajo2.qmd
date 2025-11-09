@@ -40,6 +40,13 @@ execute:
 tbl-cap-location: top
 ---
 
+```{r}
+source("teoriadecision_funciones_multicriterio_diagram.R")
+source("teoriadecision_funciones_multicriterio_utiles.R")
+source("teoriadecision_funciones_multicriterio.R")
+```
+
+
 ## Motivación
 
 En el ámbito académico y de investigación, es habitual utilizar software estadístico para el análisis de datos, la modelización y la visualización de resultados. Sin embargo, existen múltiples opciones con distintas características, licencias y niveles de complejidad.
@@ -67,5 +74,323 @@ Compatibilidad (C4): Considera la capacidad de trabajar con distintos formatos y
   -C4.2 Integración con otros lenguajes
 Comunidad y soporte (C5):Disponibilidad de soporte técnico, foros, tutoriales en línea y la fuerza de la comunidad de usuarios.
 Visualización y resultados (C6): Evalúa la calidad de los gráficos, reportes y exportación de resultados.
+
+## AHP con funciones R
+
+### Matriz de Criterios
+
+```{r}
+n.criterios <- c("C1_Coste", "C2_Uso", "C3_Tecnica", "C4_Compatibilidad", "C5_Comunidad", "C6_Visualizacion")
+tb01_ahp <- multicriterio.crea.matrizvaloraciones_mej(c(2,  1/3,  1/2,    3,    3,
+                                              1/3,  1/2,    2,    2,
+                                             2,    4,    2,
+                                             3,    2,
+                                             2),numalternativas = 6,v.nombres.alternativas = n.criterios)
+round(tb01_ahp,2)
+```
+Pesos locales de la Matriz de criterios con Método básico
+```{r}
+resC1 = multicriterio.metodoAHP.variante3.basico(tb01_ahp) 
+resC1$valoraciones.ahp
+```
+
+### Matriz de Subcriterios para C3 (Capacidad Técnica)
+
+```{r}
+(tb01c3_ahp <- multicriterio.crea.matrizvaloraciones_mej(c(2),numalternativas = 2,v.nombres.alternativas = c("C3.1_Variedad", "C3.2_Automatizacion")))
+```
+Para proyectos académicos, la Variedad de Análisis (C3.1) es moderadamente más importante que la Automatización/Scripts (C3.2). Un estudiante necesita que el software pueda hacer el análisis, mientras que la automatización es secundaria (importante para proyectos largos, pero no para el alcance inicial).
+
+Pesos locales de los subcriterios de C3 con Método básico
+```{r}
+resC3 = multicriterio.metodoAHP.variante3.basico(tb01c3_ahp)
+resC3$valoraciones.ahp
+```
+
+
+### Matriz de Subcriterios para C4 (Compatibilidad)
+
+```{r}
+(tb01c4_ahp <- multicriterio.crea.matrizvaloraciones_mej(c(1/3),numalternativas = 2,v.nombres.alternativas = c("C4.1_Formatos", "C4.2_Integracion")))
+```
+
+La Integración con otros Lenguajes (C4.2, ej. llamar a R desde Python) es más importante que la simple compatibilidad de formatos (C4.1). La tendencia académica es hacia la integración modular de lenguajes.
+
+Pesos locales de los subcriterios de C4 con básico
+```{r}
+resC4 = multicriterio.metodoAHP.variante3.basico(tb01c4_ahp)
+resC4$valoraciones.ahp
+```
+
+### Nivel final: Pesos locales para cada alternativa según cada criterio/subcriterio
+
+C1_Coste_y_licencia
+
+RStudio y Python son gratuitos, por lo que superan ampliamente a SPSS y Stata, que requieren licencias pagas (SPSS es el más costoso).
+```{r}
+Xmatriz1 = multicriterio.crea.matrizvaloraciones_mej(c(1/9,1/9,3, 
+                                                       1/2,7,
+                                                       9),4,c("SPSS","RStudio","Python","Stata"))
+res1 = multicriterio.metodoAHP.variante3.basico(Xmatriz1) 
+res1$valoraciones.ahp
+```
+
+C2_Facilidad_de_uso
+
+SPSS es el más intuitivo y fácil para principiantes; RStudio requiere algo más de curva de aprendizaje; Python es más técnico y Stata intermedio.
+```{r}
+Xmatriz2 = multicriterio.crea.matrizvaloraciones_mej(c(5,7,3, 
+                                                       3,2,
+                                                       1/3),4,c("SPSS","RStudio","Python","Stata"))
+res2 = multicriterio.metodoAHP.variante3.basico(Xmatriz2) 
+res2$valoraciones.ahp
+```
+
+C3_1_Variedad_de_análisis
+
+Python y RStudio ofrecen mayor variedad y flexibilidad; SPSS y Stata son más limitados en análisis avanzados.
+```{r}
+Xmatriz31 = multicriterio.crea.matrizvaloraciones_mej(c(1/3,1/5,2, 
+                                                       1/2,3,
+                                                       5),4,c("SPSS","RStudio","Python","Stata"))
+res31 = multicriterio.metodoAHP.variante3.basico(Xmatriz31) 
+res31$valoraciones.ahp
+```
+
+C3_2_Automatización
+
+Python y RStudio destacan por su programación y automatización mediante scripts; SPSS y Stata son más cerrados.
+```{r}
+Xmatriz32 = multicriterio.crea.matrizvaloraciones_mej(c(1/7,1/9,1/3, 
+                                                       1/2,3,
+                                                       5),4,c("SPSS","RStudio","Python","Stata"))
+res32 = multicriterio.metodoAHP.variante3.basico(Xmatriz32) 
+res32$valoraciones.ahp
+```
+
+C4_1_Formatos_compatibles
+
+Todos manejan formatos comunes, pero Python y RStudio son más versátiles.
+```{r}
+Xmatriz41 = multicriterio.crea.matrizvaloraciones_mej(c(2,1/3,3, 
+                                                       1/3,2,
+                                                       5),4,c("SPSS","RStudio","Python","Stata"))
+res41 = multicriterio.metodoAHP.variante3.basico(Xmatriz41) 
+res41$valoraciones.ahp
+```
+
+C4_2_Integración
+
+Python y RStudio permiten integración con múltiples lenguajes y librerías; SPSS y Stata son más restringidos.
+```{r}
+Xmatriz42 = multicriterio.crea.matrizvaloraciones_mej(c(1/5,1/9,1/3, 
+                                                       1/3,4,
+                                                       6),4,c("SPSS","RStudio","Python","Stata"))
+res42 = multicriterio.metodoAHP.variante3.basico(Xmatriz42) 
+res42$valoraciones.ahp
+```
+
+C5_Comunidad_y_soporte
+
+RStudio y Python tienen comunidades activas y abundante soporte en línea; SPSS ofrece soporte formal limitado y Stata menor comunidad.
+```{r}
+Xmatriz5 = multicriterio.crea.matrizvaloraciones_mej(c(1/7,1/9,3, 
+                                                       1,7,
+                                                       9),4,c("SPSS","RStudio","Python","Stata"))
+res5 = multicriterio.metodoAHP.variante3.basico(Xmatriz5) 
+res5$valoraciones.ahp
+```
+
+C6_Visualización_y_resultados
+
+RStudio y Python producen gráficos avanzados y personalizables; SPSS tiene buena presentación básica; Stata es más limitado visualmente.
+```{r}
+Xmatriz6 = multicriterio.crea.matrizvaloraciones_mej(c(1/2,1/4,2, 
+                                                       1/2,3,
+                                                       5),4,c("SPSS","RStudio","Python","Stata"))
+res6 = multicriterio.metodoAHP.variante3.basico(Xmatriz6) 
+res6$valoraciones.ahp
+```
+
+### Resultado Final
+
+```{r}
+c1 = 0.17528555
+c2 = 0.11890456
+c31 = 0.32859187*0.6666667
+c32 = 0.32859187*0.3333333
+c41 = 0.21141767*0.25  
+c42 = 0.21141767*0.75
+c5 = 0.08291462
+c6 = 0.08288573
+crisub = c(c1,c2,c31,c32,c41,c42,c5,c6)
+matper = matrix(c(0.07509665, 0.35328922, 0.52769914, 0.04391499,
+                  0.57549561, 0.19893371, 0.06451698, 0.16105370 ,
+                  0.12081340, 0.28110048, 0.51315789, 0.08492823,
+                  0.04703997, 0.30879336, 0.52830100, 0.11586568,
+                  0.24147189, 0.15442101, 0.51812196, 0.08598514,
+                  0.04971916, 0.26558365, 0.58106468, 0.10363250,
+                  0.08004808, 0.41033654, 0.46418269, 0.04543269,
+                  0.1434479, 0.2641684, 0.5056096, 0.0867741),
+                ncol = 4,nrow=8,byrow = T)
+pond.globales = crisub %*% matper 
+colnames(pond.globales) = c("SPSS","RStudio","Python","Stata") 
+pond.globales
+```
+
+Los resultados finales del AHP indican que Python (47.0%) es la alternativa más adecuada para proyectos académicos, seguido por RStudio (28.7%), mientras que SPSS (15.2%) y Stata (9.0%) presentan una preferencia mucho menor.
+
+Esto se justifica porque Python destaca en los criterios más relevantes, como la capacidad técnica, la automatización y la compatibilidad, además de ofrecer una licencia gratuita y una amplia comunidad de soporte.
+
+RStudio también obtiene una alta puntuación debido a su facilidad de uso y buen equilibrio entre potencia y accesibilidad.
+
+Por el contrario, SPSS y Stata son penalizados por su costo de licencia elevado y menor flexibilidad técnica, lo que reduce su conveniencia en el entorno académico.
+
+### Estudio de la consistencia
+
+Consitencia Global
+```{r}
+Inconsistencia_global = multicriterio.metodoAHP.coef.inconsistencia(tb01_ahp)
+c(Inconsistencia_global$mensaje, round(Inconsistencia_global$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Coste y Licencia
+```{r}
+Inconsistencia_1 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz1)
+c(Inconsistencia_1$mensaje, round(Inconsistencia_1$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Facilidad de Uso
+```{r}
+Inconsistencia_2 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz2)
+c(Inconsistencia_2$mensaje, round(Inconsistencia_2$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Variedad de Análisis
+```{r}
+Inconsistencia_31 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz31)
+c(Inconsistencia_31$mensaje, round(Inconsistencia_31$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Automatización
+```{r}
+Inconsistencia_32 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz32)
+c(Inconsistencia_32$mensaje, round(Inconsistencia_32$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Formatos Compatibles
+```{r}
+Inconsistencia_41 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz41)
+c(Inconsistencia_41$mensaje, round(Inconsistencia_41$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Integración
+```{r}
+Inconsistencia_42 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz42)
+c(Inconsistencia_42$mensaje, round(Inconsistencia_42$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Comunidad y Soporte
+```{r}
+Inconsistencia_5 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz5)
+c(Inconsistencia_5$mensaje, round(Inconsistencia_5$RI.coef.inconsistencia,4) )
+```
+
+Consitencia Visualización y resultadods
+```{r}
+Inconsistencia_6 = multicriterio.metodoAHP.coef.inconsistencia(Xmatriz6)
+c(Inconsistencia_6$mensaje, round(Inconsistencia_6$RI.coef.inconsistencia,4) )
+```
+
+Por tanto, en conjunto, el modelo muestra una consistencia adecuada, así como en todos los criterios evaluados, los valores de inconsistencia se mantienen por debajo del umbral aceptable (< 0.1), lo que indica que las comparaciones realizadas son coherentes y las prioridades obtenidas pueden considerarse fiables para la toma de decisiones.
+
+
+## AHP con paquete AHP
+
+C1. Coste y licencia:
+
+
+C2. Facilidad de uso:
+
+
+C3. Capacidad técnica:
+
+
+
+
+```{r}
+library(ahp)
+ahp = Load("ejx01_ahpbis.ahp") 
+ahp
+```
+Visualizar la jerarquía
+```{r}
+Visualize(ahp)
+```
+
+Calcular las prioridades
+
+```{r}
+Calculate(ahp)
+print(ahp, priority = function(x) x$parent$priority["Total", x$name])
+```
+
+
+
+Analizar
+
+```{r}
+aa = AnalyzeTable(ahp, sort = "orig") 
+formattable::as.htmlwidget(aa)
+```
+Conclusiones del modelo AHP
+
+El modelo AHP muestra que Python (47,4%) es la mejor alternativa para proyectos académicos, seguido por RStudio (28,8%), SPSS (15,1%) y Stata (8,7%).
+Esto indica una clara preferencia por herramientas libres, potentes y con gran capacidad técnica e integración.
+
+Principales razones del resultado:
+
+Python destaca por su potencia técnica (mayor peso en Capacidad técnica y Compatibilidad), amplia automatización y soporte comunitario.
+
+RStudio obtiene buenos resultados en análisis estadístico y visualización, siendo ideal para entornos académicos menos orientados a la programación.
+
+SPSS es fuerte en facilidad de uso y presentación de resultados, pero limitado en análisis avanzados y flexibilidad.
+
+Stata resulta menos competitivo por su coste, menor integración y comunidad reducida.
+
+```{r}
+aa = AnalyzeTable(ahp,variable = "priority",sort = "orig") 
+formattable::as.htmlwidget(aa)
+```
+Las prioridades globales reflejan que Python concentra la mayor preferencia gracias a su bajo coste, alta capacidad técnica, amplia compatibilidad e importante comunidad de soporte.
+
+Principales hallazgos por criterio:
+
+C1. Coste y licencia: Python (52,9%) y RStudio (36,2%) son los más valorados por ser gratuitos y de código abierto, frente al coste elevado de SPSS y Stata.
+
+C2. Facilidad de uso: SPSS (59,0%) destaca por su entorno gráfico y simplicidad, mientras que RStudio y Python exigen mayor conocimiento técnico.
+
+C3. Capacidad técnica: Python sobresale (≈53%) por su potencia en automatización, análisis avanzados y flexibilidad. RStudio también obtiene un desempeño sólido.
+
+C4. Compatibilidad: Python (≈59%) es el más versátil en integración y formatos, seguido de RStudio (≈27%).
+
+C5. Comunidad y soporte: Python (46,9%) y RStudio (41,2%) lideran por la amplitud de documentación y foros activos.
+
+C6. Visualización y resultados: Python (50,7%) y RStudio (26,4%) destacan por sus bibliotecas gráficas potentes y alta calidad visual.
+
+En conjunto, Python se posiciona como la herramienta más equilibrada y potente para investigación y docencia en entornos académicos, mientras que RStudio es una excelente alternativa complementaria para análisis estadístico clásico.
+
+El índice global de inconsistencia del modelo es 5,8%, lo que se considera aceptable y dentro del umbral de coherencia (<10%).
+Los subcriterios presentan niveles bajos o moderados:
+
+C3 (Capacidad técnica) y C6 (Visualización) muestran valores mínimos (≈1–2%), indicando comparaciones muy consistentes.
+
+C1, C2 y C5 tienen inconsistencias entre 6–9%, aceptables dada la naturaleza subjetiva de los juicios.
+
+C4_2 (Integración) presenta el valor más alto (4,8%), pero sigue dentro del margen tolerado.
+
+En síntesis, el modelo AHP es consistente y fiable, permitiendo extraer conclusiones robustas sobre la preferencia global de software estadístico.
+
+
 
 

@@ -1,0 +1,127 @@
+
+Version: 2.0
+Alternatives: &alternatives
+  SPSS:
+  RStudio:
+  Python:
+  Stata:
+
+Goal:
+  name: Seleccionar el mejor software estadístico para proyectos académicos
+  preferences:
+    pairwise:
+      - [C1_Coste_y_licencia, C2_Facilidad_de_uso, 2]
+      - [C1_Coste_y_licencia, C3_Capacidad_técnica, 1/3]
+      - [C1_Coste_y_licencia, C4_Compatibilidad, 1/2]
+      - [C1_Coste_y_licencia, C5_Comunidad_y_soporte, 3]
+      - [C1_Coste_y_licencia, C6_Visualización_y_resultados, 3]
+      - [C2_Facilidad_de_uso, C3_Capacidad_técnica, 1/3]
+      - [C2_Facilidad_de_uso, C4_Compatibilidad, 1/2]
+      - [C2_Facilidad_de_uso, C5_Comunidad_y_soporte, 2]
+      - [C2_Facilidad_de_uso, C6_Visualización_y_resultados, 2]
+      - [C3_Capacidad_técnica, C4_Compatibilidad, 2]
+      - [C3_Capacidad_técnica, C5_Comunidad_y_soporte, 4]
+      - [C3_Capacidad_técnica, C6_Visualización_y_resultados, 2]
+      - [C4_Compatibilidad, C5_Comunidad_y_soporte, 3]
+      - [C4_Compatibilidad, C6_Visualización_y_resultados, 2]
+      - [C5_Comunidad_y_soporte, C6_Visualización_y_resultados, 2]
+
+  children:
+    C1_Coste_y_licencia:
+      preferences:
+        pairwise:
+          - [SPSS, RStudio, 1/9]
+          - [SPSS, Python, 1/9]
+          - [SPSS, Stata, 3]
+          - [RStudio, Python, 1/2]
+          - [RStudio, Stata, 7]
+          - [Python, Stata, 9]
+      children: *alternatives
+
+    C2_Facilidad_de_uso:
+      preferences:
+        pairwise:
+          - [SPSS, RStudio, 5]
+          - [SPSS, Python, 7]
+          - [SPSS, Stata, 3]
+          - [RStudio, Python, 3]
+          - [RStudio, Stata, 2]
+          - [Python, Stata, 1/3]
+      children: *alternatives
+
+    C3_Capacidad_técnica:
+      preferences:
+        pairwise:
+          - [C3_1_Variedad_de_análisis, C3_2_Automatización, 2]
+      children:
+        C3_1_Variedad_de_análisis:
+          preferences:
+            pairwise:
+              - [SPSS, RStudio, 1/3]
+              - [SPSS, Python, 1/5]
+              - [SPSS, Stata, 2]
+              - [RStudio, Python, 1/2]
+              - [RStudio, Stata, 3]
+              - [Python, Stata, 5]
+          children: *alternatives
+
+        C3_2_Automatización:
+          preferences:
+            pairwise:
+              - [SPSS, RStudio, 1/7]
+              - [SPSS, Python, 1/9]
+              - [SPSS, Stata, 1/3]
+              - [RStudio, Python, 1/2]
+              - [RStudio, Stata, 3]
+              - [Python, Stata, 5]
+          children: *alternatives
+
+    C4_Compatibilidad:
+      preferences:
+        pairwise:
+          - [C4_1_Formatos_compatibles, C4_2_Integración, 1/3]
+      children:
+        C4_1_Formatos_compatibles:
+          preferences:
+            pairwise:
+              - [SPSS, RStudio, 2]
+              - [SPSS, Python, 1/3]
+              - [SPSS, Stata, 3]
+              - [RStudio, Python, 1/3]
+              - [RStudio, Stata, 2]
+              - [Python, Stata, 5]
+          children: *alternatives
+
+        C4_2_Integración:
+          preferences:
+            pairwise:
+              - [SPSS, RStudio, 1/5]
+              - [SPSS, Python, 1/9]
+              - [SPSS, Stata, 1/3]
+              - [RStudio, Python, 1/3]
+              - [RStudio, Stata, 4]
+              - [Python, Stata, 6]
+          children: *alternatives
+
+    C5_Comunidad_y_soporte:
+      preferences:
+        pairwise:
+          - [SPSS, RStudio, 1/7]
+          - [SPSS, Python, 1/9]
+          - [SPSS, Stata, 3]
+          - [RStudio, Python, 1]
+          - [RStudio, Stata, 7]
+          - [Python, Stata, 9]
+      children: *alternatives
+
+    C6_Visualización_y_resultados:
+      preferences:
+        pairwise:
+          - [SPSS, RStudio, 1/2]
+          - [SPSS, Python, 1/4]
+          - [SPSS, Stata, 2]
+          - [RStudio, Python, 1/2]
+          - [RStudio, Stata, 3]
+          - [Python, Stata, 5]
+      children: *alternatives
+
