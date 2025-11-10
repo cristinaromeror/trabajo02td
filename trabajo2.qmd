@@ -391,6 +391,10 @@ C4_2 (Integración) presenta el valor más alto (4,8%), pero sigue dentro del ma
 
 En síntesis, el modelo AHP es consistente y fiable, permitiendo extraer conclusiones robustas sobre la preferencia global de software estadístico.
 
+## Electre 
+
+Usaremos los pesos obtenicos con el Método AHP.
+
 
 
 
